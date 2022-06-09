@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container">
+  <div class="card mt-5">
+    <div class="card-header text-center py-3">
+      <h1>URL Shortner Application <i class="fas fa-link px-2"></i></h1>
+    </div>
+    <div class="px-3 py-4">
+        <div class="row g-1">
+          <div class="col-10">
+              <p>Number of Visits to URL :  {{ short_url }} = {{ visits }}</p>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+<div>
+    <div class="mx-auto text-center mt-5">
+        {% if no_visits %}
+            Visits of {{ short_url }} : 0
+        {% endif %}
+    </div>
+</div>
+
+{% endblock body %}
