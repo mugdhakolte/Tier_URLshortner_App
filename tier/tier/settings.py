@@ -150,3 +150,9 @@ CORS_ORIGIN_WHITELIST = (
     "http://127.0.0.1:8000",
 )
 
+# Pub/Sub settings
+PUBSUB_URL = os.environ.get('PUBSUB_URL', 'amqp://guest:guest@localhost:5672/%2F')
+PUBSUB_EXCHANGE = os.environ.get('PUBSUB_EXCHANGE', 'articles')
+PUBSUB_EXCHANGE_TYPE = os.environ.get('PUBSUB_EXCHANGE_TYPE', 'topic')
+PUBSUB_ROUTING_KEY = os.environ.get('PUBSUB_ROUTING_KEY', 'article.published')
+

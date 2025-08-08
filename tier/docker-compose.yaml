@@ -20,8 +20,16 @@ services:
       - POSTGRES_NAME=tier
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
+      - PUBSUB_URL=amqp://guest:guest@rabbitmq:5672/%2F
     depends_on:
       - db
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
 volumes:
   pgdata:

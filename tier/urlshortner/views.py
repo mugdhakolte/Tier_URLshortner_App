@@ -5,6 +5,10 @@ from django.views import View
 from django.shortcuts import render, redirect
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from .pubsub_client import ArticlePublisher
 
 from urlshortner.models import *
 
@@ -89,5 +93,24 @@ class VisitedURLCount(View):
             pass
         context = {}
         return render(request, 'visits.html', context)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class PublishArticleView(View):
+    def post(self, request):
+        try:
+            import json
+            payload = json.loads(request.body.decode('utf-8'))
+        except Exception:
+            return HttpResponseBadRequest('Invalid JSON payload')
+
+        required_fields = ['id', 'title', 'author', 'url']
+        missing = [f for f in required_fields if f not in payload]
+        if missing:
+            return HttpResponseBadRequest(f"Missing fields: {', '.join(missing)}")
+
+        publisher = ArticlePublisher()
+        publisher.publish(payload)
+        return JsonResponse({'status': 'published', 'routing_key': 'article.published'})
 
 
